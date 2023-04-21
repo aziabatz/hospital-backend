@@ -5,13 +5,28 @@ const { generateJWT } = require('../helpers/jwt');
 
 
 const getUsers = async (req,res) => {
+    
+    from = Number(req.query.from) || 0;
+    to = Number(req.query.to) || 0;
 
-    const users = await User.find();
+    console.log(from,to);
+
+    //ESTA MANERA ES MUY LENTA
+    // const users = await User.find()
+    //     .skip(from)
+    //     .limit(to);
+
+    const [users,total] = await Promise.all([
+        User.find()
+         .skip(from)
+         .limit(to),
+        User.count()
+    ]);
 
     res.json({
         ok: true,
         users,
-        uid: req.uid
+        total
     })
 };
 

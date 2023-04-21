@@ -37,7 +37,7 @@ router.put(
 
 router.delete(
     "/:id",
-    validateJWT,
+    [validateJWT],
     deleteUser
   );
 
