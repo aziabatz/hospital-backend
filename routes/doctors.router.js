@@ -14,7 +14,7 @@ router.post(
   [ 
     validateJWT,
     check("name", "El nombre es obligatorio").not().isEmpty(),
-    check("user", "No es un MongoID válido").isMongoId(),
+    //check("user", "No es un MongoID válido").isMongoId(),
     check("hospital", "No es un MongoID válido").isMongoId(),
     validateFields
   ],
@@ -26,6 +26,7 @@ router.put(
   [
     validateJWT,
     check("name", "El nombre es obligatorio").not().isEmpty(),
+    check("hospital", "No es un MongoID válido").isMongoId(),
     validateFields
   ],
   updateDoctor

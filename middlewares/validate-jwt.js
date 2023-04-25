@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { generateJWT } = require("../helpers/jwt");
 
 
 const validateJWT = (req,res,next) => {
@@ -30,6 +31,19 @@ const validateJWT = (req,res,next) => {
 
 };
 
+const renewToken = async (req,res,next) => {
+
+    const uid = req.uid;
+    const token = await generateJWT(uid)
+
+    res.json({
+        ok:true,
+        token,
+        uid
+    });
+};
+
 module.exports = {
-    validateJWT
+    validateJWT,
+    renewToken
 };

@@ -53,11 +53,75 @@ const createDoctor = async (req, res=response) => {
     }
 };
 
-const updateDoctor = (req, res=response) => {
+const updateDoctor = async (req, res=response) => {
 
+    const id = req.params.id;
+    const uid = req.uid;
+
+    try {
+
+        const foundDoctor = await Doctor.findById(id);
+
+        if(!foundDoctor) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro el medico'
+            });
+        }
+
+        const newDoctor = {
+            ...req.body,
+            createdBy: uid
+        }
+
+        const updatedDoctor = await Doctor.findByIdAndUpdate(id,
+            newDoctor,
+            {
+                new: true
+            });
+
+        res.json({
+            ok: true,
+            doctor: updatedDoctor
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado'
+        })
+    }
 };
 
-const deleteDoctor = (req, res=response) => {
+const deleteDoctor = async (req, res=response) => {
+
+    const id = req.params.id;
+
+    try {
+
+        const foundDoctor = await Doctor.findById(id);
+
+        if(!foundDoctor) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro el medico'
+            });
+        }
+
+        await Doctor.findByIdAndDelete(id);
+
+
+        res.json({
+            ok: true,
+            msg: 'medico eliminado'
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error inesperado'
+        })
+    }
 
 };
 
